@@ -1,0 +1,99 @@
+Code used to connect with database
+Code of db.php
+<?php
+function execute( $sql )
+{
+$conn=mysqli_connect( 'localhost', 'root','','house' );
+if( !$conn )
+{
+die( mysqli_connect_error() );
+}
+$res=$conn->query( $sql );
+if( !$res )
+{
+die( mysqli_error( $conn) );
+}
+return( $res );
+}
+?>
+
+
+
+
+
+
+
+
+
+Signup page code
+<?php
+include_once('db.php');
+$sql=" select count(*)+1 as sino from owners";
+$res=execute( $sql );
+$row=$res->fetch_object();
+$sino=$row->sino;
+?>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="signup.css" />
+<script src="jquery-1.11.0.js">
+</script>
+<script>
+$(document).ready(
+function(){
+$("#f1").submit(
+function(){
+var fdata=$("#f1").serialize();
+$.ajax({
+type: 'POST',
+url: 'savesignup.php',
+data:fdata,
+success: function( data )
+{
+$("#form").html(data);
+}});
+return(false);
+}
+);
+}
+);
+</script>
+</head>
+<body>
+<div id=content>
+<div id=form >
+<marquee behaviour=bounce ><font color=white>Owners Signup here</font></marquee>
+<form name=f1 method=post  id=f1 >
+<label for="sino" >Sino</label>
+<input type=text name=sino required id=sino value=<?php echo $sino ?>  readonly />
+<br>
+<label for="fame" >First Name</label>
+<input type=text  id=fname name=fname required  />
+<br>
+<label for="lame" >Last Name</label>
+<input type=text id=lname name=lname required  />
+<br>
+<label for="contno" >Contact No</label>
+<input type=text  id=contno name=contno required  />
+<br>
+<label for="email" >Email</label>
+<input type=text id=email name=email required  />
+<br>
+<label for="addr" >Address</label>
+<textarea class=addr name=addr></textarea>
+<br>
+<label for="uname" >UserName</label>
+<input type=text id=uname name=uname required  />
+<br>
+<label for="pwd" >Password</label>
+<input type=password id=pwd name=pwd required  />
+<br>
+<input type=submit value=" CREATE ACCOUNT"  name=submit id=submit />
+</form>
+</div>
+</div>
+</body>
+</html>
+
+
+
